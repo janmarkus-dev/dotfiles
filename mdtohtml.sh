@@ -1,10 +1,9 @@
 #!/bin/sh
 
-INPUT="$1"
-BASENAME=$(basename "$INPUT" .md)
-OUTFILE="/tmp/${BASENAME}.html"
-TEMPLATE=$(mktemp)
-cat > "$TEMPLATE" << 'EOF'
+OUT="/tmp/$(basename "$1" .md).html"
+TMP=$(mktemp)
+
+cat > "$TMP" << 'EOF'
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,16 +19,11 @@ $body$
 </html>
 EOF
 
-pandoc "$INPUT" -s --css="$HOME/Notes/style.css" --template="$TEMPLATE" -o "$OUTFILE"
-xdg-open "$OUTFILE"
-LAST_MTIME=$(stat -c %Y "$INPUT" 2>/dev/null)
-while true; do
-  sleep 1
-  CURRENT_MTIME=$(stat -c %Y "$INPUT" 2>/dev/null)
-  if [ "$CURRENT_MTIME" != "$LAST_MTIME" ]; then
-    pandoc "$INPUT" -s --css="$HOME/Notes/style.css" --template="$TEMPLATE" -o "$OUTFILE"
-    LAST_MTIME=$CURRENT_MTIME
-  fi
+pandoc "$1" -s --css="$HOME/Notes/style.css" --template="$TMP" -o "$OUT"
+xdg-open "$OUT"
+
+inotifywait -m -e modify,close_write "$1" | while read -r; do
+  pandoc "$1" -s --css="$HOME/Notes/style.css" --template="$TMP" -o "$OUT"
 done
 
-trap "rm -f '$TEMPLATE'" EXIT INT TERM
+trap "rm -f '$TMP'" EXIT INT TERM
