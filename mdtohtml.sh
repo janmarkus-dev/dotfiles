@@ -7,8 +7,6 @@ cat > "$TMP" << 'EOF'
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="1">
   $if(title)$<title>$title$</title>$endif$
   $if(css)$<link rel="stylesheet" href="$css$">$endif$
@@ -21,9 +19,7 @@ EOF
 
 pandoc "$1" -s --css="$HOME/Notes/style.css" --template="$TMP" -o "$OUT"
 xdg-open "$OUT"
-
 inotifywait -m -e modify,close_write "$1" | while read -r; do
   pandoc "$1" -s --css="$HOME/Notes/style.css" --template="$TMP" -o "$OUT"
 done
-
 trap "rm -f '$TMP'" EXIT INT TERM
