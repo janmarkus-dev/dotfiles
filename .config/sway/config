@@ -1,10 +1,14 @@
 set $mod Mod4
 ### Output configuration
-output * bg /home/janm/wall.jpg fill
+output * bg ~/wall.jpg fill
 ### Key bindings
+set $lock 'swaymsg exit'
+bindswitch --reload --locked lid:on exec $lock
+
 # Basics:
+    bindsym $mod+Shift+e exec swaymsg exit    
     bindsym $mod+q kill
-    bindsym $mod+d exec ~/.config/sway/wmenu.sh
+    bindsym $mod+d exec wmenu-run
     floating_modifier $mod normal
     bindsym $mod+Shift+c reload
 # Moving around:
@@ -44,11 +48,11 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 # Utilities:
     bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
-    bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
-    bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
+    bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -10%
+    bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +10%
     bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
-    bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
-    bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+    bindsym --locked XF86MonBrightnessDown exec brightnessctl set 10%-
+    bindsym --locked XF86MonBrightnessUp exec brightnessctl set 10%+
 exec_always {
     export $(dbus-launch)
     export XDG_RUNTIME_DIR=/run/user/$(id -u)
@@ -60,7 +64,10 @@ input 2:7:SynPS/2_Synaptics_TouchPad {
     scroll_method edge
     tap enabled
 }
-
+input 1133:45119:Logi_M196_Mouse {
+ accel_profile "flat"
+ pointer_accel -0.6
+}
 ## Colors
 set $base0 #000000
 set $base1 #ffffff
@@ -68,6 +75,4 @@ set $base2 #808080
 client.focused          $base0  $base0  $base1  $base2  $base2
 client.focused_inactive $base0  $base0  $base1
 client.unfocused        $base0  $base0  $base1
-client.urgent           $base0  $base0  $base1
 client.placeholder      $base0  $base0  $base1
-client.background       $base0
