@@ -8,7 +8,7 @@ bindswitch --reload --locked lid:on exec $lock
 # Basics:
     bindsym $mod+Shift+e exec swaymsg exit    
     bindsym $mod+q kill
-    bindsym $mod+d exec wmenu-run
+    bindsym $mod+d exec /home/janm/.config/sway/wmenu.sh
     floating_modifier $mod normal
     bindsym $mod+Shift+c reload
 # Moving around:
@@ -68,11 +68,60 @@ input 1133:45119:Logi_M196_Mouse {
  accel_profile "flat"
  pointer_accel -0.6
 }
-## Colors
-set $base0 #000000
-set $base1 #ffffff
-set $base2 #808080
-client.focused          $base0  $base0  $base1  $base2  $base2
-client.focused_inactive $base0  $base0  $base1
-client.unfocused        $base0  $base0  $base1
-client.placeholder      $base0  $base0  $base1
+
+## Material Theme Colors (Dark Scheme)
+# Surface colors
+set $surface              #14140C
+set $surfaceContainer     #202018
+set $surfaceContainerHigh #2A2A22
+set $surfaceBright        #3A3A31
+
+# Primary colors
+set $primary              #C7CC79
+set $onPrimary            #303300
+set $primaryContainer     #464A02
+
+# Secondary colors
+set $secondary            #C8C9A6
+set $onSecondary          #303219
+
+# Tertiary colors
+set $tertiary             #A3D0C0
+set $onTertiary           #08372C
+
+# Text colors
+set $onSurface            #E5E3D6
+set $onSurfaceVariant     #C9C7B6
+
+# Border and outline colors
+set $outline              #929182
+set $outlineVariant       #47473B
+
+# Error/warning colors
+set $error                #FFB4AB
+set $errorContainer       #93000A
+
+# Material Design Window Borders
+# Format: border background text indicator child_border
+default_border pixel 2
+default_floating_border pixel 2
+gaps inner 4
+gaps outer 1
+
+# Focused window - Primary accent with elevated surface
+client.focused          $primaryContainer  $surfaceContainerHigh  $primary  $primary  $primary
+
+# Focused inactive - Subtle outline
+client.focused_inactive $surfaceContainer  $surfaceContainer  $onSurfaceVariant  $outlineVariant  $outlineVariant
+
+# Unfocused - Low contrast
+client.unfocused        $surface  $surface  $onSurfaceVariant  $outlineVariant  $outline
+
+# Urgent - Error colors for attention
+client.urgent           $errorContainer  $error  $onSurface  $error  $error
+
+# Placeholder
+client.placeholder      $surface  $surfaceContainer  $onSurfaceVariant  $outlineVariant  $outlineVariant
+
+# Background for non-window areas
+client.background       $surface
