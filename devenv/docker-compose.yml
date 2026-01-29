@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  devenv:
+    build: .
+    container_name: ubuntu-devenv
+    ports:
+      - "2222:2222"
+    volumes:
+      - ./projects:/home/dev/projects
+    restart: unless-stopped
