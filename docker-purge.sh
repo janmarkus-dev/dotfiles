@@ -1,5 +1,5 @@
 #!/bin/sh
 
-doas docker stop $(doas docker ps -a -q)
-doas docker rm $(doas docker ps -a -q)
-doas docker rmi $(doas docker images -q)
+doas podman stop $(doas podman ps -a -q)
+doas podman rm $(doas podman ps -a -q)
+doas podman rmi $(doas podman images -q)
